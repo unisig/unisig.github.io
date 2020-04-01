@@ -8,7 +8,7 @@ isSafeAscii char =
     Char.isUpper char
         || Char.isLower char
         || Char.isDigit char
-        || String.contains (String.fromChar char) ".@-"
+        || String.contains (String.fromChar char) ".:@-/#"
 
 
 hexByte hexPrefix byte =
