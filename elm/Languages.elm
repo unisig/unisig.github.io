@@ -110,6 +110,28 @@ python3 =
     )
 
 
+ruby =
+    ( "Ruby"
+    , \bytes ->
+        [ "UNISIG = \\"
+        , Bytes.backslashEscapedString 2 "\"" "\" \\" bytes
+        , "  .force_encoding('binary')"
+        , ""
+        , "def write_unisig(io)"
+        , "  raise unless io.binmode?"
+        , "  io.write(UNISIG)"
+        , "end"
+        , ""
+        , "def read_unisig(io)"
+        , "  raise unless io.binmode?"
+        , "  if io.read(UNISIG.length) != UNISIG"
+        , "    raise IOError.new('Unknown file format')"
+        , "  end"
+        , "end"
+        ]
+    )
+
+
 schemeR6RS =
     ( "Scheme (R6RS)"
     , \bytes ->
@@ -152,6 +174,7 @@ languages =
     , commonLisp
     , goLang
     , python3
+    , ruby
     , schemeR6RS
     , schemeR7RS
     ]
