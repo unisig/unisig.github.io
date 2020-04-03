@@ -110,12 +110,50 @@ python3 =
     )
 
 
+schemeR6RS =
+    ( "Scheme (R6RS)"
+    , \bytes ->
+        [ "(define unisig"
+        , "  #vu8("
+        , Bytes.lispByteVector 7 bytes
+            ++ "))"
+        , ""
+        , "(define write-unisig (port) (put-bytevector port unisig))"
+        , ""
+        , "(define read-unisig (port)"
+        , "  (let ((buf (get-bytevector-n port (bytevector-length unisig))))"
+        , "    (unless (equal? buf unisig)"
+        , "      (error #f \"Unknown file format\"))))"
+        ]
+    )
+
+
+schemeR7RS =
+    ( "Scheme (R7RS)"
+    , \bytes ->
+        [ "(define unisig"
+        , "  #u8("
+        , Bytes.lispByteVector 6 bytes
+            ++ "))"
+        , ""
+        , "(define write-unisig (port) (write-bytevector unisig port))"
+        , ""
+        , "(define read-unisig (port)"
+        , "  (let ((buf (read-bytevector port (bytevector-length unisig))))"
+        , "    (unless (equal? buf unisig)"
+        , "      (error \"Unknown file format\"))))"
+        ]
+    )
+
+
 languages : List Language
 languages =
     [ cStdio
     , goLang
     , python3
     , commonLisp
+    , schemeR6RS
+    , schemeR7RS
     ]
 
 
