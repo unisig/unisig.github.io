@@ -149,9 +149,9 @@ schemeR7RS =
 languages : List Language
 languages =
     [ cStdio
+    , commonLisp
     , goLang
     , python3
-    , commonLisp
     , schemeR6RS
     , schemeR7RS
     ]
