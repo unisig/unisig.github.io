@@ -36,8 +36,7 @@ view : Model -> Html.Html Msg
 view model =
     div []
         (List.append
-            [ h1 [] [ text "Unisig maker" ]
-            , p [] [ text "Generate a uniform signature for your file format or network protocol. " ]
+            [ h3 [] [ text "Your signature" ]
             , input
                 [ value model.name
                 , size 50
