@@ -32,6 +32,16 @@ init =
     }
 
 
+alignmentDropdown model =
+    select [ on "change" (Json.map SetAlignment Util.targetValueIntParse) ]
+        (List.map
+            (\( intval, title ) -> option [ value (String.fromInt intval) ] [ text title ])
+            (( 1, "No alignment needed" )
+                :: List.map (\n -> ( n, String.fromInt n ++ "-byte alignment" )) [ 2, 4, 8 ]
+            )
+        )
+
+
 languageDropdown model =
     case Languages.code model.name model.languageIndex model.alignment of
         Err theErr ->
@@ -60,13 +70,7 @@ view model =
                 , onInput SetName
                 ]
                 []
-            , select [ on "change" (Json.map SetAlignment Util.targetValueIntParse) ]
-                (List.map
-                    (\( intval, title ) -> option [ value (String.fromInt intval) ] [ text title ])
-                    (( 1, "No alignment needed" )
-                        :: List.map (\n -> ( n, String.fromInt n ++ "-byte alignment" )) [ 2, 4, 8 ]
-                    )
-                )
+            , alignmentDropdown model
             ]
             (languageDropdown model)
         )
