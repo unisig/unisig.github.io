@@ -32,6 +32,23 @@ init =
     }
 
 
+languageDropdown model =
+    case Languages.code model.name model.languageIndex model.alignment of
+        Err theErr ->
+            [ div [] [ text theErr ] ]
+
+        Ok ( theBytes, theCode ) ->
+            [ h3 [] [ text "Hex bytes" ]
+            , pre [] [ text (theBytes |> Bytes.spaceSeparatedHexDump 0) ]
+            , h3 [] [ text "Source code" ]
+            , select [ on "change" (Json.map SetLanguage Util.targetValueIntParse) ]
+                (Languages.map
+                    (\index name -> option [ value (String.fromInt index) ] [ text name ])
+                )
+            , pre [] [ text theCode ]
+            ]
+
+
 view : Model -> Html.Html Msg
 view model =
     div []
@@ -51,21 +68,7 @@ view model =
                     )
                 )
             ]
-            (case Languages.code model.name model.languageIndex model.alignment of
-                Err theErr ->
-                    [ div [] [ text theErr ] ]
-
-                Ok ( theBytes, theCode ) ->
-                    [ h2 [] [ text "Hex bytes" ]
-                    , pre [] [ text (theBytes |> Bytes.spaceSeparatedHexDump 0) ]
-                    , h2 [] [ text "Source code" ]
-                    , select [ on "change" (Json.map SetLanguage Util.targetValueIntParse) ]
-                        (Languages.map
-                            (\index name -> option [ value (String.fromInt index) ] [ text name ])
-                        )
-                    , pre [] [ text theCode ]
-                    ]
-            )
+            (languageDropdown model)
         )
 
 
