@@ -46,7 +46,7 @@ alignmentDropdown model =
         )
 
 
-languageDropdown model =
+languageArea model =
     case Languages.code model.name model.languageIndex model.alignment of
         Err theErr ->
             [ div [] [ text theErr ] ]
@@ -84,7 +84,7 @@ view model =
                 []
             , alignmentDropdown model
             ]
-            (languageDropdown model)
+            (languageArea model)
         )
 
 
