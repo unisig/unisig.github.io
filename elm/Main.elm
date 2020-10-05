@@ -49,7 +49,7 @@ languageDropdown model =
 
         Ok ( theBytes, theCode ) ->
             [ h3 [] [ text "Hex bytes" ]
-            , pre [] [ text (theBytes |> Bytes.spaceSeparatedHexDump 0) ]
+            , pre [] [ text (theBytes |> Bytes.spaceSeparatedHexDump) ]
             , h3 [] [ text "Source code" ]
             , select [ on "change" (Json.map SetLanguage Util.targetValueIntParse) ]
                 (Languages.map

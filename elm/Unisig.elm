@@ -1,4 +1,4 @@
-module Unisig exposing (fromNameBytes, signatureBytes, validateNameBytes)
+module Unisig exposing (headAndBodyFromNameBytes)
 
 import Char
 import String
@@ -34,8 +34,12 @@ validateNameBytes nameBytes =
         Ok nameBytes
 
 
-fromNameBytes nameBytes =
+headAndBodyFromNameBytes nameBytes =
     nameBytes
         |> validateNameBytes
         |> Result.map
-            (\nameBytes2 -> signatureBytes ++ [ List.length nameBytes2 ] ++ nameBytes2)
+            (\nameBytes2 ->
+                ( signatureBytes ++ [ List.length nameBytes2 ]
+                , nameBytes2
+                )
+            )

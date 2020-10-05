@@ -1,4 +1,4 @@
-module Bytes exposing (align, backslashEscapedString, fromString, hexByte, hexOrAsciiByte, isSafeAscii, lispByteVector, packLine, packLines, packLinesX, padding, spaceSeparatedHexDump)
+module Bytes exposing (align, ascify, fromString, hexByte, hexOrAsciiByte, hexify, isSafeAscii, padLines, padding, spaceSeparatedHexDump)
 
 import Char
 import Util
@@ -34,60 +34,91 @@ hexOrAsciiByte hexPrefix hexSuffix byte =
         hexByte hexPrefix hexSuffix byte
 
 
-packLine maxlen between items line =
-    case items of
-        [] ->
-            ( line, items )
-
-        item :: moreItems ->
-            let
-                lineItem =
-                    line ++ between ++ item
-            in
-            if String.length lineItem > maxlen then
-                ( line, items )
-
-            else
-                packLine maxlen between moreItems lineItem
+hexify hexPrefix hexSuffix between bytes =
+    stringsToLines between
+        (List.map (hexByte hexPrefix hexSuffix)
+            bytes
+        )
 
 
-packLines maxlen between items lines =
-    case items of
-        [] ->
-            lines
-
-        item :: moreItems ->
-            let
-                ( line, evenMoreItems ) =
-                    packLine maxlen between moreItems item
-            in
-            packLines maxlen between evenMoreItems (List.append lines [ line ])
+ascify hexPrefix hexSuffix between bytes =
+    stringsToLines between
+        (List.map (hexOrAsciiByte hexPrefix hexSuffix)
+            bytes
+        )
 
 
-packLinesX indent prefix suffix between items =
+stringsToLines between strings =
     let
-        indentPrefix =
-            String.repeat indent " " ++ prefix
+        maxLineLength =
+            60
 
-        maxlen =
-            72 - String.length indentPrefix - String.length suffix
+        loop moreStrings lines line =
+            case moreStrings of
+                [] ->
+                    List.reverse
+                        (if line == "" then
+                            lines
 
-        lines =
-            packLines maxlen between items []
+                         else
+                            line :: lines
+                        )
+
+                string :: evenMoreStrings ->
+                    let
+                        extendedLine =
+                            line
+                                ++ (if line == "" then
+                                        ""
+
+                                    else
+                                        between
+                                   )
+                                ++ string
+                    in
+                    if String.length extendedLine > maxLineLength then
+                        loop evenMoreStrings (line :: lines) string
+
+                    else
+                        loop evenMoreStrings lines extendedLine
     in
-    lines |> List.map (\line -> indentPrefix ++ line ++ suffix) |> String.join "\n"
+    loop strings [] ""
 
 
-backslashEscapedString indent prefix suffix bytes =
-    bytes |> List.map (hexOrAsciiByte "\\x" "") |> packLinesX indent prefix suffix ""
+padLines firstLinePrefix nonfirstLinePrefix nonlastLineSuffix lastLineSuffix lines =
+    let
+        loop moreLines isFirst paddedLines =
+            case moreLines of
+                [] ->
+                    List.reverse paddedLines
+
+                line :: evenMoreLines ->
+                    let
+                        isLast =
+                            evenMoreLines == []
+
+                        paddedLine =
+                            (if isFirst then
+                                firstLinePrefix
+
+                             else
+                                nonfirstLinePrefix
+                            )
+                                ++ line
+                                ++ (if isLast then
+                                        lastLineSuffix
+
+                                    else
+                                        nonlastLineSuffix
+                                   )
+                    in
+                    loop evenMoreLines False (paddedLine :: paddedLines)
+    in
+    loop lines True []
 
 
-lispByteVector indent bytes =
-    bytes |> List.map (hexByte "#x" "") |> packLinesX indent "" "" " "
-
-
-spaceSeparatedHexDump indent bytes =
-    bytes |> List.map (hexByte "" "") |> packLinesX indent "" "" " "
+spaceSeparatedHexDump bytes =
+    String.join "\n" (hexify "" "" " " bytes)
 
 
 fromString : String -> List Int
