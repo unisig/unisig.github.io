@@ -1,13 +1,12 @@
 module Bytes exposing
-    ( align
-    , ascify
+    ( ascify
     , fromString
     , hexByte
     , hexOrAsciiByte
     , hexify
     , isSafeAscii
+    , padBytes
     , padLines
-    , padding
     , spaceSeparatedHexDump
     )
 
@@ -140,10 +139,6 @@ fromString string =
     string |> String.toList |> List.map Char.toCode
 
 
-padding : Int -> Int -> Int
-padding alignment length =
-    modBy alignment (alignment - modBy alignment length)
-
-
-align alignment bytes =
-    List.append bytes (List.repeat (List.length bytes |> padding alignment) 0)
+padBytes alignment length =
+    List.repeat (modBy alignment (alignment - modBy alignment length))
+        0

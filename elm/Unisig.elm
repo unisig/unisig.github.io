@@ -1,5 +1,6 @@
 module Unisig exposing (headAndBodyFromNameBytes)
 
+import Bytes
 import Char
 import String
 import Util
@@ -35,12 +36,23 @@ validateNameBytes nameBytes =
         Ok nameBytes
 
 
-headAndBodyFromNameBytes nameBytes =
+headAndBodyFromNameBytes alignment nameBytes =
     nameBytes
         |> validateNameBytes
         |> Result.map
-            (\nameBytes2 ->
-                ( signatureBytes ++ [ List.length nameBytes2 ]
-                , nameBytes2
-                )
+            (\nameBytesAgain ->
+                let
+                    head =
+                        signatureBytes ++ [ List.length nameBytes ]
+
+                    pads =
+                        Bytes.padBytes alignment
+                            (List.length head
+                                + List.length nameBytes
+                            )
+
+                    body =
+                        List.append nameBytes pads
+                in
+                ( head, body )
             )

@@ -283,7 +283,7 @@ code nameString languageIndex alignment =
     in
     nameString
         |> Bytes.fromString
-        |> Unisig.headAndBodyFromNameBytes
+        |> Unisig.headAndBodyFromNameBytes alignment
         |> Result.map
             (\( head, body ) ->
                 ( List.append head body
