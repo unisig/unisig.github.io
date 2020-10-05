@@ -1,13 +1,110 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
   <title>Unisig - Uniform signature</title>
+  <meta name="viewport" content=
+  "width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
   <script src="elm.min.js"></script>
 </head>
 <body>
-  <div id="elm"></div>
+  <div id="page" class="hfeed site">
+    <header id="masthead" class="site-header">
+      <div class="site-branding">
+        &nbsp;
+      </div>
+    </header>
+    <div id="content" class="site-content">
+      <div id="primary" class="content-area">
+        <main id="main" class="site-main">
+          <h1>Unisig – Uniform signature</h1>
+          <p>Unisig is a uniform signature scheme for <b>binary</b>
+          file formats and network protocols.</p>
+          <p>The signature (aka <em>magic number</em>) is at the
+          beginning of data identifies the format.</p>
+          <div id="intro-boxes" style="display: flex">
+            <div>
+              <h2>Discoverable</h2>
+              <ul>
+                <li>Tools can find the signature at a known
+                location</li>
+                <li>Signatures are human-readable web links</li>
+              </ul>
+              <h2>Resilient</h2>
+              <ul>
+                <li>Clearly differentiates binary data from
+                text</li>
+                <li>Detects typical file transfer errors</li>
+              </ul>
+              <h2>Decentralized</h2>
+              <ul>
+                <li>URI as an extensible naming scheme</li>
+                <li>DNS avoids a separate central registry</li>
+                <li>Timestamps avoid domain ownership disputes</li>
+                <li>UUID as a stealthy alternative to URI</li>
+              </ul>
+              <h2>Standards-based</h2>
+              <ul>
+                <li>ASCII, Unicode</li>
+                <li>UUID</li>
+                <li>URI, URL</li>
+                <li>DNS, HTTP, HTML</li>
+                <li>ISO 8601, RFC 3339</li>
+              </ul>
+            </div>
+            <div>
+            <h2>Simple</h2>
+            <ul>
+              <li>24 or 8+<i>n</i> constant bytes</li>
+              <li>Input: <code>read()</code> and
+              <code>memcmp()</code></li>
+              <li>Output: <code>write()</code></li>
+            </ul>
+            <h2>Supported</h2>
+            <ul>
+              <li>Detected by the Unix <a href=
+              "https://darwinsys.com/file/"><code>file(1)</code></a>
+              utility
+              </li>
+              <li>Detected by the <a href=
+              "https://www.mark0.net/soft-trid-e.html">TrID</a>
+              utility
+              </li>
+            </ul><img src="codex.jpeg" alt="" style=
+            "vertical-align: top"></div>
+          </div>
+          <h2>Resources</h2>
+          <ul>
+            <li>
+              <a href=
+              "https://github.com/unisig/unisig">Specification</a>
+              at GitHub
+            </li>
+            <li>
+              <a href="https://github.com/unisig/lib">Library
+              code</a> at GitHub
+            </li>
+          </ul>
+          <h2>Make your own</h2>
+          <p>Generate a signature for your new file format or
+          network protocol.</p>
+          <div id="generator">
+            <div id="elm"></div>
+          </div>
+        </main>
+      </div>
+    </div>
+    <footer id="colophon" class="site-footer">
+      <div class="site-info">
+        Theme adapted from <a href=
+        "https://wordpress.com/theme/cols">Cols</a> by Automattic.
+        Image from <a href=
+        "https://en.wikipedia.org/wiki/Codex_Seraphinianus">Codex
+        Seraphinianus</a>.
+      </div>
+    </footer>
+  </div>
   <script>
     var app = Elm.Main.init({node: document.getElementById("elm")});
   </script>
