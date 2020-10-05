@@ -1,10 +1,7 @@
 module Bytes exposing
     ( ascify
     , fromString
-    , hexByte
-    , hexOrAsciiByte
     , hexify
-    , isSafeAscii
     , padBytes
     , padLines
     , spaceSeparatedHexDump

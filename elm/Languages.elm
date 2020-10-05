@@ -1,14 +1,7 @@
 module Languages exposing
     ( Language
-    , cStdio
     , code
-    , commonLisp
-    , defaultLanguage
-    , goLang
-    , languageByIndex
-    , languages
     , map
-    , python3
     )
 
 import Bytes
