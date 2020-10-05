@@ -11,7 +11,7 @@ isSafeAscii char =
         || String.contains (String.fromChar char) ".:@-/#"
 
 
-hexByte hexPrefix byte =
+hexByte hexPrefix hexSuffix byte =
     let
         digits =
             String.toList "0123456789abcdef"
@@ -19,10 +19,10 @@ hexByte hexPrefix byte =
         hexDigit n =
             Util.listNth n digits |> Maybe.withDefault '0' |> String.fromChar
     in
-    hexPrefix ++ hexDigit (byte // 16) ++ hexDigit (modBy 16 byte)
+    hexPrefix ++ hexDigit (byte // 16) ++ hexDigit (modBy 16 byte) ++ hexSuffix
 
 
-hexOrAsciiByte hexPrefix byte =
+hexOrAsciiByte hexPrefix hexSuffix byte =
     let
         char =
             Char.fromCode byte
@@ -31,7 +31,7 @@ hexOrAsciiByte hexPrefix byte =
         String.fromChar char
 
     else
-        hexByte hexPrefix byte
+        hexByte hexPrefix hexSuffix byte
 
 
 packLine maxlen between items line =
@@ -79,15 +79,15 @@ packLinesX indent prefix suffix between items =
 
 
 backslashEscapedString indent prefix suffix bytes =
-    bytes |> List.map (hexOrAsciiByte "\\x") |> packLinesX indent prefix suffix ""
+    bytes |> List.map (hexOrAsciiByte "\\x" "") |> packLinesX indent prefix suffix ""
 
 
 lispByteVector indent bytes =
-    bytes |> List.map (hexByte "#x") |> packLinesX indent "" "" " "
+    bytes |> List.map (hexByte "#x" "") |> packLinesX indent "" "" " "
 
 
 spaceSeparatedHexDump indent bytes =
-    bytes |> List.map (hexByte "") |> packLinesX indent "" "" " "
+    bytes |> List.map (hexByte "" "") |> packLinesX indent "" "" " "
 
 
 fromString : String -> List Int
