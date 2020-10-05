@@ -35,9 +35,13 @@ init =
 alignmentDropdown model =
     select [ on "change" (Json.map SetAlignment Util.targetValueIntParse) ]
         (List.map
-            (\( intval, title ) -> option [ value (String.fromInt intval) ] [ text title ])
+            (\( intval, title ) ->
+                option [ value (String.fromInt intval) ] [ text title ]
+            )
             (( 1, "No alignment needed" )
-                :: List.map (\n -> ( n, String.fromInt n ++ "-byte alignment" )) [ 2, 4, 8 ]
+                :: List.map
+                    (\n -> ( n, String.fromInt n ++ "-byte alignment" ))
+                    [ 2, 4, 8 ]
             )
         )
 
@@ -51,9 +55,17 @@ languageDropdown model =
             [ h3 [] [ text "Hex bytes" ]
             , pre [] [ text (theBytes |> Bytes.spaceSeparatedHexDump) ]
             , h3 [] [ text "Source code" ]
-            , select [ on "change" (Json.map SetLanguage Util.targetValueIntParse) ]
+            , select
+                [ on "change"
+                    (Json.map SetLanguage
+                        Util.targetValueIntParse
+                    )
+                ]
                 (Languages.map
-                    (\index name -> option [ value (String.fromInt index) ] [ text name ])
+                    (\index name ->
+                        option [ value (String.fromInt index) ]
+                            [ text name ]
+                    )
                 )
             , pre [] [ text theCode ]
             ]

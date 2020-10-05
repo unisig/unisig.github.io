@@ -13,7 +13,8 @@ validateNameBytes : List Int -> Result String (List Int)
 validateNameBytes nameBytes =
     let
         nameString =
-            String.join "" (List.map (Char.fromCode >> String.fromChar) nameBytes)
+            String.join ""
+                (List.map (Char.fromCode >> String.fromChar) nameBytes)
     in
     if List.length nameBytes < 1 then
         Err "Name cannot be blank"

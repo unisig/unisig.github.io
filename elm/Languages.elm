@@ -1,4 +1,15 @@
-module Languages exposing (Language, cStdio, code, commonLisp, defaultLanguage, goLang, languageByIndex, languages, map, python3)
+module Languages exposing
+    ( Language
+    , cStdio
+    , code
+    , commonLisp
+    , defaultLanguage
+    , goLang
+    , languageByIndex
+    , languages
+    , map
+    , python3
+    )
 
 import Bytes
 import Char
@@ -63,7 +74,10 @@ commonLisp =
         List.concat
             [ [ "(defconstant +unisig+"
               , "  (make-array "
-                    ++ String.fromInt (List.length headBytes + List.length bodyBytes)
+                    ++ String.fromInt
+                        (List.length headBytes
+                            + List.length bodyBytes
+                        )
                     ++ " :element-type '(unsigned-byte 8)"
               , "   :initial-contents"
               ]
@@ -79,8 +93,10 @@ commonLisp =
               , ""
               , "(defun read-unisig (stream)"
               , "  (let ((buf (make-array (length +unisig+)"
-              , "               :element-type '(unsigned-byte 8) :initial-element 0)))"
-              , "    (unless (and (= (length +unisig+) (read-sequence buf stream))"
+              , "               :element-type '(unsigned-byte 8)"
+                    ++ " :initial-element 0)))"
+              , "    (unless (and (= (length +unisig+)"
+                    ++ " (read-sequence buf stream))"
               , "                 (equal +unisig+ buf))"
               , "      (error \"Unknown file format\"))))"
               ]
@@ -201,7 +217,8 @@ schemeR6RS =
               , "(define write-unisig (port) (put-bytevector port unisig))"
               , ""
               , "(define read-unisig (port)"
-              , "  (let ((buf (get-bytevector-n port (bytevector-length unisig))))"
+              , "  (let ((buf (get-bytevector-n port"
+                    ++ " (bytevector-length unisig))))"
               , "    (unless (equal? buf unisig)"
               , "      (error #f \"Unknown file format\"))))"
               ]
@@ -224,7 +241,8 @@ schemeR7RS =
               , "(define write-unisig (port) (write-bytevector unisig port))"
               , ""
               , "(define read-unisig (port)"
-              , "  (let ((buf (read-bytevector port (bytevector-length unisig))))"
+              , "  (let ((buf (read-bytevector port"
+                    ++ " (bytevector-length unisig))))"
               , "    (unless (equal? buf unisig)"
               , "      (error \"Unknown file format\"))))"
               ]

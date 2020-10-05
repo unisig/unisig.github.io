@@ -1,4 +1,15 @@
-module Bytes exposing (align, ascify, fromString, hexByte, hexOrAsciiByte, hexify, isSafeAscii, padLines, padding, spaceSeparatedHexDump)
+module Bytes exposing
+    ( align
+    , ascify
+    , fromString
+    , hexByte
+    , hexOrAsciiByte
+    , hexify
+    , isSafeAscii
+    , padLines
+    , padding
+    , spaceSeparatedHexDump
+    )
 
 import Char
 import Util
@@ -19,7 +30,10 @@ hexByte hexPrefix hexSuffix byte =
         hexDigit n =
             Util.listNth n digits |> Maybe.withDefault '0' |> String.fromChar
     in
-    hexPrefix ++ hexDigit (byte // 16) ++ hexDigit (modBy 16 byte) ++ hexSuffix
+    hexPrefix
+        ++ hexDigit (byte // 16)
+        ++ hexDigit (modBy 16 byte)
+        ++ hexSuffix
 
 
 hexOrAsciiByte hexPrefix hexSuffix byte =
