@@ -63,7 +63,10 @@ languageArea model =
                 ]
                 (Languages.map
                     (\index name ->
-                        option [ value (String.fromInt index) ]
+                        option
+                            [ value (String.fromInt index)
+                            , selected (model.languageIndex == index)
+                            ]
                             [ text name ]
                     )
                 )
