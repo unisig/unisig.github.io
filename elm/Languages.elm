@@ -73,12 +73,13 @@ commonLisp =
     , \( headBytes, bodyBytes ) ->
         List.concat
             [ [ "(defconstant +unisig+"
-              , "  (make-array "
+              , "  (make-array"
+              , "   "
                     ++ String.fromInt
                         (List.length headBytes
                             + List.length bodyBytes
                         )
-                    ++ " :element-type '(unsigned-byte 8)"
+              , "   :element-type '(unsigned-byte 8)"
               , "   :initial-contents"
               ]
             , Bytes.padLines
@@ -93,8 +94,8 @@ commonLisp =
               , ""
               , "(defun read-unisig (stream)"
               , "  (let ((buf (make-array (length +unisig+)"
-              , "               :element-type '(unsigned-byte 8)"
-                    ++ " :initial-element 0)))"
+              , "                         :element-type '(unsigned-byte 8)"
+              , "                         :initial-element 0)))"
               , "    (unless (and (= (length +unisig+)"
                     ++ " (read-sequence buf stream))"
               , "                 (equal +unisig+ buf))"
