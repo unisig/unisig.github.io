@@ -293,6 +293,43 @@ schemeR7RS =
     )
 
 
+standardML =
+    ( "Standard ML"
+    , \( headBytes, bodyBytes ) ->
+        List.concat
+            [ [ "exception BadUnisig;"
+              , ""
+              , "val unisig ="
+              , "    Word8Vector.fromList ["
+              ]
+            , Bytes.padLines
+                "        "
+                "        "
+                ","
+                ""
+                (Bytes.hexify "0wx" "" ", " (List.append headBytes bodyBytes))
+            , [ "    ];"
+              , ""
+              , "fun word8VectorEqual a b ="
+              , "    let fun check 0 = true"
+              , "          | check n = (Word8Vector.sub (a, (n - 1)) ="
+              , "                       Word8Vector.sub (b, (n - 1)))"
+              , "                      andalso check (n - 1)"
+              , "        val an = Word8Vector.length a"
+              , "        val bn = Word8Vector.length b"
+              , "    in an = bn andalso check an end;"
+              , ""
+              , "fun writeUnisig ostream = BinIO.output (ostream, unisig);"
+              , ""
+              , "fun readUnisig istream ="
+              , "    let val len = (Word8Vector.length unisig)"
+              , "        val data = BinIO.inputN (istream, len)"
+              , "    in if word8VectorEqual data unisig then () else raise BadUnisig end;"
+              ]
+            ]
+    )
+
+
 languages : List Language
 languages =
     [ cStdio
@@ -303,6 +340,7 @@ languages =
     , ruby
     , schemeR6RS
     , schemeR7RS
+    , standardML
     ]
 
 
