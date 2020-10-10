@@ -58,6 +58,20 @@ alignmentDropdown model =
         )
 
 
+languageDropdown model =
+    select
+        [ on "change" (Json.map SetLanguage Util.targetValueIntParse) ]
+        (Languages.map
+            (\index name ->
+                option
+                    [ value (String.fromInt index)
+                    , selected (model.languageIndex == index)
+                    ]
+                    [ text name ]
+            )
+        )
+
+
 languageArea model =
     case Languages.code model.name model.languageIndex model.alignment of
         Err theErr ->
@@ -67,21 +81,7 @@ languageArea model =
             [ h3 [] [ text "Hex bytes" ]
             , pre [] [ text (theBytes |> Bytes.spaceSeparatedHexDump) ]
             , h3 [] [ text "Source code" ]
-            , select
-                [ on "change"
-                    (Json.map SetLanguage
-                        Util.targetValueIntParse
-                    )
-                ]
-                (Languages.map
-                    (\index name ->
-                        option
-                            [ value (String.fromInt index)
-                            , selected (model.languageIndex == index)
-                            ]
-                            [ text name ]
-                    )
-                )
+            , languageDropdown model
             , pre [] [ text theCode ]
             ]
 
