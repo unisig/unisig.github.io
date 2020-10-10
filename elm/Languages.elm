@@ -61,6 +61,55 @@ cStdio =
     )
 
 
+cPlusPlusIostream =
+    ( "C++ (iostream)"
+    , \( headBytes, bodyBytes ) ->
+        List.concat
+            [ [ "#include <cstring>"
+              , "#include <iostream>"
+              , ""
+              , "static const unsigned char unisig["
+                    ++ String.fromInt
+                        (List.length headBytes
+                            + List.length bodyBytes
+                        )
+                    ++ "] = {"
+              ]
+            , Bytes.padLines
+                "    "
+                "    "
+                ""
+                ""
+                (Bytes.hexify "0x" "," " " (List.append headBytes bodyBytes))
+            , [ "};"
+              , ""
+              , "static void write_unisig(std::ostream &stream)"
+              , "{"
+              , "    stream.write(reinterpret_cast<const char *>(unisig), sizeof(unisig));"
+              , "    if (!stream.good()) {"
+              , "        exit(EXIT_FAILURE);"
+              , "    }"
+              , "}"
+              , ""
+              , "static void read_unisig(std::istream &stream)"
+              , "{"
+              , "    char buf[sizeof(unisig)];"
+              , "    stream.read(buf, sizeof(unisig));"
+              , "    if (!stream.good()) {"
+              , "        exit(EXIT_FAILURE);"
+              , "    }"
+              , "    if (stream.gcount() != sizeof(unisig)) {"
+              , "        exit(EXIT_FAILURE);"
+              , "    }"
+              , "    if (memcmp(buf, unisig, sizeof(unisig))) {"
+              , "        exit(EXIT_FAILURE);"
+              , "    }"
+              , "}"
+              ]
+            ]
+    )
+
+
 commonLisp =
     ( "Common Lisp"
     , \( headBytes, bodyBytes ) ->
@@ -247,6 +296,7 @@ schemeR7RS =
 languages : List Language
 languages =
     [ cStdio
+    , cPlusPlusIostream
     , commonLisp
     , goLang
     , python3
