@@ -1,8 +1,9 @@
-module Util exposing (customDecoder, listNth, targetValueIntParse)
+module Util exposing (customDecoder, formatIsoDate, listNth, targetValueIntParse)
 
 import Char
 import Html.Events exposing (on, onInput, targetValue)
 import Json.Decode as Json
+import Time
 
 
 listNth n xs =
@@ -35,3 +36,55 @@ targetValueIntParse =
                     Nothing ->
                         Json.fail "Error"
             )
+
+
+formatIsoDate zone t =
+    let
+        monthNumber month =
+            case month of
+                Time.Jan ->
+                    1
+
+                Time.Feb ->
+                    2
+
+                Time.Mar ->
+                    3
+
+                Time.Apr ->
+                    4
+
+                Time.May ->
+                    5
+
+                Time.Jun ->
+                    6
+
+                Time.Jul ->
+                    7
+
+                Time.Aug ->
+                    8
+
+                Time.Sep ->
+                    9
+
+                Time.Oct ->
+                    10
+
+                Time.Nov ->
+                    11
+
+                Time.Dec ->
+                    12
+
+        y =
+            String.fromInt (Time.toYear zone t)
+
+        m =
+            String.fromInt (monthNumber (Time.toMonth zone t))
+
+        d =
+            String.fromInt (Time.toDay zone t)
+    in
+    y ++ "-" ++ String.pad 2 ' ' m ++ "-" ++ String.pad 2 ' ' d

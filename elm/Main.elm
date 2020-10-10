@@ -10,12 +10,15 @@ import Json.Decode as Json
 import Languages
 import Maybe
 import String
+import Task
+import Time
 import Unisig
 import Util
 
 
 type Msg
-    = SetName String
+    = Initialize Time.Posix
+    | SetName String
     | SetLanguage Int
     | SetAlignment Int
 
@@ -24,12 +27,21 @@ type alias Model =
     { name : String, languageIndex : Int, alignment : Int }
 
 
-init : Model
-init =
-    { name = "github.com/example/format#2020-04-01"
-    , languageIndex = 0
-    , alignment = 1
-    }
+initialName =
+    "github.com/example/format"
+
+
+initialNameWithTime t =
+    initialName ++ "#" ++ Util.formatIsoDate Time.utc t
+
+
+init () =
+    ( { name = initialName
+      , languageIndex = 0
+      , alignment = 1
+      }
+    , Task.perform Initialize Time.now
+    )
 
 
 alignmentDropdown model =
@@ -91,9 +103,11 @@ view model =
         )
 
 
-update : Msg -> Model -> Model
 update msg model =
-    case msg of
+    ( case msg of
+        Initialize t ->
+            { model | name = initialNameWithTime t }
+
         SetName name ->
             { model | name = name }
 
@@ -102,7 +116,18 @@ update msg model =
 
         SetAlignment alignment ->
             { model | alignment = alignment }
+    , Cmd.none
+    )
+
+
+subscriptions number =
+    Sub.none
 
 
 main =
-    Browser.sandbox { init = init, view = view, update = update }
+    Browser.element
+        { init = init
+        , view = view
+        , update = update
+        , subscriptions = subscriptions
+        }
