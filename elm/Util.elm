@@ -87,4 +87,4 @@ formatIsoDate zone t =
         d =
             String.fromInt (Time.toDay zone t)
     in
-    y ++ "-" ++ String.pad 2 ' ' m ++ "-" ++ String.pad 2 ' ' d
+    y ++ "-" ++ String.pad 2 '0' m ++ "-" ++ String.pad 2 '0' d
