@@ -284,8 +284,8 @@ schemeR7RS =
               , "(define (write-unisig port) (write-bytevector unisig port))"
               , ""
               , "(define (read-unisig port)"
-              , "  (let ((buf (read-bytevector port"
-                    ++ " (bytevector-length unisig))))"
+              , "  (let ((buf (read-bytevector (bytevector-length unisig)"
+                    ++ " port)))"
               , "    (unless (equal? buf unisig)"
               , "      (error \"Unknown file format\"))))"
               ]
