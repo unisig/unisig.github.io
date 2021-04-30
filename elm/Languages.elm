@@ -257,9 +257,9 @@ schemeR6RS =
                 "))"
                 (Bytes.hexify "#x" "" " " (List.append headBytes bodyBytes))
             , [ ""
-              , "(define write-unisig (port) (put-bytevector port unisig))"
+              , "(define (write-unisig port) (put-bytevector port unisig))"
               , ""
-              , "(define read-unisig (port)"
+              , "(define (read-unisig port)"
               , "  (let ((buf (get-bytevector-n port"
                     ++ " (bytevector-length unisig))))"
               , "    (unless (equal? buf unisig)"
@@ -281,9 +281,9 @@ schemeR7RS =
                 "))"
                 (Bytes.hexify "#x" "" " " (List.append headBytes bodyBytes))
             , [ ""
-              , "(define write-unisig (port) (write-bytevector unisig port))"
+              , "(define (write-unisig port) (write-bytevector unisig port))"
               , ""
-              , "(define read-unisig (port)"
+              , "(define (read-unisig port)"
               , "  (let ((buf (read-bytevector port"
                     ++ " (bytevector-length unisig))))"
               , "    (unless (equal? buf unisig)"
